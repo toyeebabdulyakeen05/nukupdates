@@ -802,12 +802,12 @@
 </footer>
 <script>
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBWWctg_p1ptLWD9BiiwIk0r-C6QCOHs0Y",
+    authDomain: "nukupdates.firebaseapp.com",
+    projectId: "nukupdates",
+    storageBucket: "nukupdates.firebasestorage.app",
+    messagingSenderId: "21572166971",
+    appId: "1:21572166971:web:42ad504529bff0f943c31e"
   };
 
   if (!firebase.apps.length) {
@@ -816,7 +816,6 @@
   
   const db = firebase.firestore();
 
-  // This is the "Brain" of your Library
   async function saveToLibrary() {
     const category = document.getElementById('resCategory').value;
     const level = document.getElementById('resLevel').value;
