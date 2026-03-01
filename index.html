@@ -633,6 +633,21 @@
 <section id="adminPanel">
   <div class="admin-card">
     <h2>🛡️ Admin Panel — Moderation</h2>
+    <div class="admin-card" style="margin-bottom: 20px; border: 2px solid #003366; background: #fdfdfd;">
+    <h3 style="color: #003366;">📤 Add New Academic Resource</h3>
+    <div style="display: grid; grid-template-columns: 1fr; gap: 12px; padding: 10px;">
+        <select id="resCategory" style="padding: 10px; border-radius: 5px;">
+            <option value="Undergraduate">Undergraduate</option>
+            <option value="MBBS">MBBS</option>
+            <option value="Postgraduate">Postgraduate</option>
+        </select>
+        <input type="text" id="resLevel" placeholder="Level (e.g. 100L, Masters, 1st Prof)" style="padding: 10px; border: 1px solid #ccc;">
+        <input type="text" id="resTitle" placeholder="Course Name (e.g. MTH 102)" style="padding: 10px; border: 1px solid #ccc;">
+        <input type="text" id="resUrl" placeholder="Link to PDF/Video" style="padding: 10px; border: 1px solid #ccc;">
+        <button onclick="saveToLibrary()" style="padding: 12px; background: #003366; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 5px;">Publish to Library</button>
+    </div>
+</div>
+
     <div style="overflow-x:auto">
       <table class="admin-table">
         <thead>
@@ -662,14 +677,14 @@
                 <div style="font-size: 40px; margin-bottom: 10px;">📅</div>
                 <h3 style="margin: 10px 0;">Exam Timetable</h3>
                 <p style="color: #666; font-size: 14px;">Level 100 Second Semester</p>
-                <a href="timetable.pdf" download style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #003366; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Download PDF</a>
+                <button onclick="showCourses('timetable')" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #003366; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Select Semester</button>
             </div>
 
             <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
                 <div style="font-size: 40px; margin-bottom: 10px;">📝</div>
-                <h3 style="margin: 10px 0;">CIT 142 Past Qs</h3>
+                <h3 style="margin: 10px 0;">Academic Library</h3>
                 <p style="color: #666; font-size: 14px;">Programming Methodology</p>
-                <a href="cit142-questions.pdf" download style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">Download PDF</a>
+                ​<button onclick="showCategories()" style="display: inline-block; margin-top: 15px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Enter Library</button>
             </div>
 
             <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
@@ -785,6 +800,57 @@
 <footer>
   &copy; 2025 <strong>Northwest University Kano</strong> — Student Updates Hub &nbsp;|&nbsp; Powered by Firebase
 </footer>
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  
+  const db = firebase.firestore();
+
+  // This is the "Brain" of your Library
+  async function saveToLibrary() {
+    const category = document.getElementById('resCategory').value;
+    const level = document.getElementById('resLevel').value;
+    const title = document.getElementById('resTitle').value;
+    const url = document.getElementById('resUrl').value;
+
+    if (!level || !title || !url) {
+      alert("Please fill in Level, Course Title, and Link!");
+      return;
+    }
+
+    try {
+      // This sends the data to your Firebase 'resources' collection
+      await db.collection("resources").add({
+        category: category,
+        level: level,
+        title: title,
+        url: url,
+        timestamp: new Date()
+      });
+      alert("Successfully added to the Library!");
+      location.reload(); 
+    } catch (error) {
+      console.error("Firebase Error: ", error);
+      alert("Error: Make sure your Firebase is connected correctly.");
+    }
+  }
+
+  // This function makes sure the Back button works
+  function hideSelection() {
+    document.getElementById('downloads').style.display = 'block';
+    document.getElementById('course-selection').style.display = 'none';
+  }
+</script>
 
 </body>
 </html>
